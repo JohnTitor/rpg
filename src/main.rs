@@ -50,12 +50,14 @@ where
 
 fn open_browser(url: &str) {
     if cfg!(target_os = "windows") {
+        // ref. https://stackoverflow.com/a/49115945
         let status = Command::new("rundll32.exe")
             .args(&["url.dll,FileProtocolHandler", url])
             .status()
             .expect("failed to open browser");
         assert!(status.success());
     } else if cfg!(target_os = "macos") || cfg!(target_os = "linux") {
+        // ref. https://dwheeler.com/essays/open-files-urls.html
         #[cfg(target_os = "macos")]
         let cmd = "open";
         #[cfg(target_os = "linux")]
@@ -70,6 +72,7 @@ fn open_browser(url: &str) {
             assert!(status.success());
         }
     } else {
+        // Ignore other platforms for now.
         unimplemented!()
     }
 }
