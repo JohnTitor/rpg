@@ -1,0 +1,36 @@
+name: CI (Windows)
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - stable
+          - nightly
+        target:
+          - x86_64-pc-windows-msvc
+
+    name: ${{ matrix.version }} - ${{ matrix.target }}
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install ${{ matrix.version }}
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.version }}-${{ matrix.target }}
+          profile: minimal
+          override: true
+
+      - name: Check build
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
