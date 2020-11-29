@@ -6,6 +6,8 @@ This is for the **R**ust **P**lay**G**round, so let's call it "RPG".
 
 ## Usage
 
+See also `rpg --help`.
+
 ### Run
 
 Run your code on the Rust Playground:
