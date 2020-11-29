@@ -48,35 +48,39 @@ where
     }
 }
 
+fn open_browser(url: &str) {
+    if cfg!(target_os = "windows") {
+        let status = Command::new("rundll32.exe")
+            .args(&["url.dll,FileProtocolHandler", url])
+            .status()
+            .expect("failed to open browser");
+        assert!(status.success());
+    } else if cfg!(target_os = "macos") || cfg!(target_os = "linux") {
+        #[cfg(target_os = "macos")]
+        let cmd = "open";
+        #[cfg(target_os = "linux")]
+        let cmd = "xdg-open";
+
+        #[cfg(any(target_os = "macos", target_os = "linux"))]
+        {
+            let status = Command::new(cmd)
+                .arg(url)
+                .status()
+                .expect("failed to open browser");
+            assert!(status.success());
+        }
+    } else {
+        unimplemented!()
+    }
+}
+
 fn main() {
     let opts: Opts = Opts::parse();
 
     match opts.subcmd {
         SubCommand::Run(r) => match crate::run::run(&r) {
             Ok(url) => {
-                if cfg!(target_os = "windows") {
-                    let status = Command::new("rundll32.exe")
-                        .args(&["url.dll,FileProtocolHandler", &url])
-                        .status()
-                        .expect("failed to open browser");
-                    assert!(status.success());
-                } else if cfg!(target_os = "macos") || cfg!(target_os = "linux") {
-                    #[cfg(target_os = "macos")]
-                    let cmd = "open";
-                    #[cfg(target_os = "linux")]
-                    let cmd = "xdg-open";
-
-                    #[cfg(any(target_os = "macos", target_os = "linux"))]
-                    {
-                        let status = Command::new(cmd)
-                            .arg(url)
-                            .status()
-                            .expect("failed to open browser");
-                        assert!(status.success());
-                    }
-                } else {
-                    unimplemented!()
-                }
+                open_browser(&url);
             }
             Err(e) => {
                 eprintln!("failed to execute `run` command: {}", e);
