@@ -1,8 +1,3 @@
-// 1. get file name
-// 2. get file content
-// 3. generate URL
-// 4. Pass it
-
 use std::fs::File;
 use std::io::prelude::*;
 

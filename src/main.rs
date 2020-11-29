@@ -30,7 +30,6 @@ fn main() {
 
     match opts.subcmd {
         SubCommand::Run(t) => {
-            println!("file name is {}.", t.file_name);
             match crate::run::run(&t.file_name) {
                 Ok(url) => {
                     if cfg!(target_os = "windows") {
@@ -57,8 +56,8 @@ fn main() {
                         unimplemented!()
                     }
                 }
-                Err(_) => {
-                    eprintln!("Failed to execute `run` command; check your file and contents.");
+                Err(e) => {
+                    eprintln!("Failed to execute `run` command: {}", e);
                     std::process::exit(1);
                 }
             }
