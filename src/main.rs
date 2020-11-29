@@ -2,6 +2,7 @@ use clap::Clap;
 use std::process::Command;
 
 mod run;
+mod share;
 
 /// CLI tool for running your code on the Rust Playground.
 #[derive(Clap)]
@@ -14,6 +15,7 @@ struct Opts {
 #[derive(Clap)]
 enum SubCommand {
     Run(Run),
+    Share(Share),
 }
 
 /// A subcommand for running a snippet on the playground.
@@ -33,11 +35,17 @@ struct Run {
     edition: String,
 }
 
+#[derive(Clap)]
+struct Share {
+    /// File name contains code you want to share.
+    file_name: String,
+}
+
 fn main() {
     let opts: Opts = Opts::parse();
 
     match opts.subcmd {
-        SubCommand::Run(t) => match crate::run::run(&t) {
+        SubCommand::Run(r) => match crate::run::run(&r) {
             Ok(url) => {
                 if cfg!(target_os = "windows") {
                     let status = Command::new("rundll32.exe")
@@ -67,6 +75,15 @@ fn main() {
                 eprintln!("failed to execute `run` command: {}", e);
                 std::process::exit(1);
             }
-        },
+        }
+        SubCommand::Share(s) => match crate::share::share(&s) {
+            Ok(id) => {
+                println!("Share URL: https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist={}", id);
+            }
+            Err(e) => {
+                eprintln!("failed to execute `share` command: {}", e);
+                std::process::exit(1);
+            }
+        }
     }
 }
