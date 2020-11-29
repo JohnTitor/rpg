@@ -1,8 +1,14 @@
 use std::{fs::File, collections::HashMap};
 use std::io::prelude::*;
 use serde::Deserialize;
+use clap::Clap;
 
-use crate::Share;
+/// A subcommand for generating permanent playground URL.
+#[derive(Clap)]
+pub struct Share {
+    /// File name contains code you want to share.
+    file_name: String,
+}
 
 #[derive(Deserialize)]
 struct GistRes {

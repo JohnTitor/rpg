@@ -4,6 +4,9 @@ use std::process::Command;
 mod run;
 mod share;
 
+use crate::run::Run;
+use crate::share::Share;
+
 /// CLI tool for running your code on the Rust Playground.
 #[derive(Clap)]
 #[clap(version = "0.1.0", author = "Yuki Okushi <huyuumi.dev@gmail.com>")]
@@ -16,29 +19,6 @@ struct Opts {
 enum SubCommand {
     Run(Run),
     Share(Share),
-}
-
-/// A subcommand for running a snippet on the playground.
-/// Open your default browser with passed code.
-#[derive(Clap)]
-struct Run {
-    /// File name to execute.
-    file_name: String,
-    #[clap(short, long, default_value = "stable")]
-    /// rustc version, panic if not `stable`, `beta`, or `nightly`.
-    version: String,
-    #[clap(short, long, default_value = "debug")]
-    /// Opt level, panic if not `debug` or `release`.
-    mode: String,
-    #[clap(short, long, default_value = "2018")]
-    /// Edition, panic if not `2015` or `2018`.
-    edition: String,
-}
-
-#[derive(Clap)]
-struct Share {
-    /// File name contains code you want to share.
-    file_name: String,
 }
 
 fn main() {
