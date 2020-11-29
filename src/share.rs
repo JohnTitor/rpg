@@ -64,5 +64,10 @@ pub(crate) fn share(share: &Share) -> Result<String, RpgError> {
     let client = reqwest::blocking::Client::new();
     let res: GistRes = client.post(GIST_GEN_URL).json(&req_json).send()?.json()?;
 
-    Ok(res.id)
+    let url = format!(
+        "https://play.rust-lang.org/?version={}&mode={}&edition={}&gist={}",
+        share.version, share.mode, share.edition, res.id
+    );
+
+    Ok(url)
 }

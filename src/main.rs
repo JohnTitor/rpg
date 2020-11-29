@@ -91,13 +91,9 @@ fn main() {
             }
         },
         SubCommand::Share(s) => match crate::share::share(&s) {
-            Ok(id) => {
+            Ok(url) => {
                 // FIXME: Should be able to specify version, mode, and edition.
-                println!(
-                    "Share URL: \
-                    https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist={}",
-                    id
-                );
+                println!("Share URL: {}", url);
             }
             Err(e) => {
                 eprintln!("failed to execute `share` command: {}", e);
