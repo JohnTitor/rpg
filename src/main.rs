@@ -17,8 +17,7 @@ enum SubCommand {
 }
 
 /// A subcommand for running a snippet on the playground.
-/// Currently, the passed code isn't formatted well.
-/// Use rustfmt on the playground if needed.
+/// Open your default browser with passed code.
 #[derive(Clap)]
 struct Run {
     /// File name to execute.
