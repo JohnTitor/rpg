@@ -8,7 +8,7 @@ This is for the **R**ust **P**lay**G**round, so let's call it "RPG".
 
 ### Run
 
-Run your code on the Rust Playground.
+Run your code on the Rust Playground:
 
 ```sh
 rpg run <file-name>
