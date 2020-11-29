@@ -16,10 +16,36 @@ struct Opts {
     subcmd: SubCommand,
 }
 
+/// Subcommands for RPG.
 #[derive(Clap)]
 enum SubCommand {
     Run(Run),
     Share(Share),
+}
+
+/// A helper trait to validate some options.
+trait Validator {
+    fn version(&self) -> String;
+    fn mode(&self) -> String;
+    fn edition(&self) -> String;
+}
+
+/// Validate options and cause a panic if it's unexpected.
+pub(crate) fn validate_opts<T>(cmd: &T)
+where
+    T: Validator,
+{
+    // FIXME: More elegant handling.
+    let (version, mode, edition) = (cmd.version(), cmd.mode(), cmd.edition());
+    if !(version == "stable" || version == "beta" || version == "nightly") {
+        panic!("`version` should be one of `stable`, `beta`, or `nightly`");
+    }
+    if !(mode == "debug" || mode == "release") {
+        panic!("`mode` should be one of `debug` or `release`");
+    }
+    if !(edition == "2015" || edition == "2018") {
+        panic!("`edition` should be one of `2015` or `2018`");
+    }
 }
 
 fn main() {

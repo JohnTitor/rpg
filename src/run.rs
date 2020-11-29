@@ -1,14 +1,24 @@
+//! A module for `run` subcommand.
+//!
+//! ## Usage
+//!
+//! ```sh
+//! rpg run <file-name>
+//!```
+//! file-name: A file contains code to run.
+
 use clap::Clap;
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use std::fs::File;
 use std::io::prelude::*;
 
 use crate::error::RpgError;
+use crate::{validate_opts, Validator};
 
 /// A subcommand for running a snippet on the playground.
 /// Open your default browser with passed code.
 #[derive(Clap)]
-pub struct Run {
+pub(crate) struct Run {
     /// File name to execute.
     file_name: String,
     #[clap(short, long, default_value = "stable")]
@@ -22,29 +32,30 @@ pub struct Run {
     edition: String,
 }
 
+impl Validator for Run {
+    fn version(&self) -> String {
+        self.version.clone()
+    }
+    fn mode(&self) -> String {
+        self.mode.clone()
+    }
+    fn edition(&self) -> String {
+        self.edition.clone()
+    }
+}
+
 pub(crate) fn run(run: &Run) -> Result<String, RpgError> {
-    let mut file = File::open(&run.file_name)?;
     validate_opts(run);
+
+    let mut file = File::open(&run.file_name)?;
     let mut code = String::new();
     file.read_to_string(&mut code)?;
+
     let code = utf8_percent_encode(&code, NON_ALPHANUMERIC).to_string();
     let url = format!(
         "https://play.rust-lang.org/?version={}&mode={}&edition={}&code={}",
         run.version, run.mode, run.edition, code
     );
-    Ok(url)
-}
 
-/// Validate options of `run` command.
-fn validate_opts(run: &Run) {
-    // FIXME: More elegant handling.
-    if !(run.version == "stable" || run.version == "beta" || run.version == "nightly") {
-        panic!("`version` should be one of `stable`, `beta`, or `nightly`");
-    }
-    if !(run.mode == "debug" || run.mode == "release") {
-        panic!("`mode` should be one of `debug` or `release`");
-    }
-    if !(run.edition == "2015" || run.edition == "2018") {
-        panic!("`edition` should be one of `2015` or `2018`");
-    }
+    Ok(url)
 }
