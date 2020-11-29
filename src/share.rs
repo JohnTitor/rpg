@@ -4,7 +4,7 @@
 //!
 //! ```sh
 //! rpg share <file-name>
-//!```
+//! ```
 //! file-name: A file contains code to share.
 
 use clap::Clap;

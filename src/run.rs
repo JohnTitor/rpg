@@ -4,7 +4,7 @@
 //!
 //! ```sh
 //! rpg run <file-name>
-//!```
+//! ```
 //! file-name: A file contains code to run.
 
 use clap::Clap;
