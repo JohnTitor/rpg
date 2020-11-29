@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 clap = "=3.0.0-beta.2"
+percent-encoding = "2.1"

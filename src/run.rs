@@ -1,3 +1,4 @@
+use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use std::fs::File;
 use std::io::prelude::*;
 
@@ -6,11 +7,13 @@ use crate::Run;
 pub(crate) fn run(run: &Run) -> std::io::Result<String> {
     let mut file = File::open(&run.file_name)?;
     validate_opts(run);
-    let mut url = format!(
-        "https://play.rust-lang.org/?version={}&mode={}&edition={}&code=",
-        run.version, run.mode, run.edition
+    let mut code = String::new();
+    file.read_to_string(&mut code)?;
+    let code = utf8_percent_encode(&code, NON_ALPHANUMERIC).to_string();
+    let url = format!(
+        "https://play.rust-lang.org/?version={}&mode={}&edition={}&code={}",
+        run.version, run.mode, run.edition, code
     );
-    file.read_to_string(&mut url)?;
     Ok(url)
 }
 
