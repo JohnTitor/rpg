@@ -1,7 +1,9 @@
+use clap::Clap;
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use std::fs::File;
 use std::io::prelude::*;
-use clap::Clap;
+
+use crate::error::RpgError;
 
 /// A subcommand for running a snippet on the playground.
 /// Open your default browser with passed code.
@@ -20,7 +22,7 @@ pub struct Run {
     edition: String,
 }
 
-pub(crate) fn run(run: &Run) -> std::io::Result<String> {
+pub(crate) fn run(run: &Run) -> Result<String, RpgError> {
     let mut file = File::open(&run.file_name)?;
     validate_opts(run);
     let mut code = String::new();

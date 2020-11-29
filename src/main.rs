@@ -1,6 +1,7 @@
 use clap::Clap;
 use std::process::Command;
 
+mod error;
 mod run;
 mod share;
 
@@ -55,15 +56,20 @@ fn main() {
                 eprintln!("failed to execute `run` command: {}", e);
                 std::process::exit(1);
             }
-        }
+        },
         SubCommand::Share(s) => match crate::share::share(&s) {
             Ok(id) => {
-                println!("Share URL: https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist={}", id);
+                // FIXME: Should be able to specify version, mode, and edition.
+                println!(
+                    "Share URL: \
+                    https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist={}",
+                    id
+                );
             }
             Err(e) => {
                 eprintln!("failed to execute `share` command: {}", e);
                 std::process::exit(1);
             }
-        }
+        },
     }
 }
