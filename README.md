@@ -16,6 +16,14 @@ Run your code on the Rust Playground:
 rpg run <file-name>
 ```
 
+### Share
+
+Generate permanent playground URL with given code:
+
+```sh
+rpg share <file-name>
+```
+
 ## License
 
 This project is licensed under either of
