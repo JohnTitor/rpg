@@ -92,7 +92,6 @@ fn main() {
         },
         SubCommand::Share(s) => match crate::share::share(&s) {
             Ok(url) => {
-                // FIXME: Should be able to specify version, mode, and edition.
                 println!("Share URL: {}", url);
             }
             Err(e) => {
