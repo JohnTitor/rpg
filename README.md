@@ -4,6 +4,20 @@ CLI tool for the [Rust Playground](https://play.rust-lang.org).
 
 This is for the **R**ust **P**lay**G**round, so let's call it "RPG".
 
+## Installation
+
+From crates.io:
+
+```sh
+# executable as `rpg`
+cargo install rpg-cli
+```
+
+From `main` branch:
+```
+cargo install --git https://github.com/JohnTitor/rpg --branch main
+```
+
 ## Usage
 
 See also `rpg --help`.
