@@ -82,8 +82,12 @@ fn main() {
 
     match opts.subcmd {
         SubCommand::Run(r) => match crate::run::run(&r) {
-            Ok(url) => {
-                open_browser(&url);
+            Ok(result) => {
+                if r.open {
+                    open_browser(&result);
+                } else {
+                    println!("{}", result);
+                }
             }
             Err(e) => {
                 eprintln!("failed to execute `run` command: {}", e);
