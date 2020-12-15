@@ -16,6 +16,12 @@ Run your code on the Rust Playground:
 rpg run <file-name>
 ```
 
+Or, open your default browser with given code:
+
+```sh
+rpg run --open <file-name>
+```
+
 ### Share
 
 Generate permanent playground URL with given code:
