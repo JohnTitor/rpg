@@ -786,7 +786,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rpg"
+name = "rpg-cli"
 version = "0.1.0"
 dependencies = [
  "clap",
