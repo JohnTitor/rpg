@@ -3,11 +3,10 @@
 //! ## Usage
 //!
 //! ```sh
-//! rpg run <file-name>
+//! rpg run -f <FILENAME> [OPTIONS]
 //! ```
 //! file-name: A file contains code to run.
 
-use clap::Clap;
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use serde::{Deserialize, Serialize};
 use std::ffi::OsString;
@@ -22,22 +21,17 @@ const RUN_URL: &str = "https://play.rust-lang.org/execute";
 
 /// A subcommand for running a snippet on the playground.
 /// Open your default browser with passed code.
-#[derive(Clap)]
 pub(crate) struct Run {
     /// File name to execute.
-    file_name: OsString,
-    #[clap(short, long, default_value = "stable")]
+    pub(crate) file_name: OsString,
     /// rustc version, panic if not `stable`, `beta`, or `nightly`.
-    version: String,
-    #[clap(short, long, default_value = "debug")]
+    pub(crate) version: String,
     /// Opt level, panic if not `debug` or `release`.
-    mode: String,
-    #[clap(short, long, default_value = "2018")]
+    pub(crate) mode: String,
     /// Edition, panic if not `2015` or `2018`.
-    edition: String,
-    #[clap(short, long)]
+    pub(crate) edition: String,
     /// Open your default browser with given code, if passed.
-    pub open: bool,
+    pub(crate) open: bool,
 }
 
 #[derive(Serialize)]
