@@ -11,6 +11,7 @@ use clap::Clap;
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use serde::{Deserialize, Serialize};
 use std::fs::File;
+use std::ffi::OsString;
 use std::io::prelude::*;
 
 use crate::error::RpgError;
@@ -24,7 +25,7 @@ const RUN_URL: &str = "https://play.rust-lang.org/execute";
 #[derive(Clap)]
 pub(crate) struct Run {
     /// File name to execute.
-    file_name: String,
+    file_name: OsString,
     #[clap(short, long, default_value = "stable")]
     /// rustc version, panic if not `stable`, `beta`, or `nightly`.
     version: String,
@@ -111,4 +112,26 @@ pub(crate) fn run(run: &Run) -> Result<String, RpgError> {
 
         Ok(res)
     }
+}
+
+#[test]
+fn check_run_cmd() {
+    use std::env;
+    let mut dir = env::temp_dir();
+    dir.push("foo.rs");
+    let file_name = dir.clone().into_os_string();
+    let mut tmpfile = File::create(dir).unwrap();
+    write!(tmpfile, "fn main() {{ println!(\"Hello!\"); }}").unwrap();
+
+    let run = Run {
+        file_name,
+        version: "stable".to_string(),
+        mode: "debug".to_string(),
+        edition: "2018".to_string(),
+        open: false,
+    };
+
+    let result = self::run(&run);
+    assert!(result.is_ok());
+    println!("{}", result.unwrap());
 }
