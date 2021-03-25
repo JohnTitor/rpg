@@ -4,6 +4,10 @@ CLI tool for the [Rust Playground](https://play.rust-lang.org).
 
 This is for the **R**ust **P**lay**G**round, so let's call it "RPG".
 
+## MSRV policy
+
+MSRV is the latest stable.
+
 ## Installation
 
 From crates.io:

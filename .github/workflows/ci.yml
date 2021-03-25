@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - stable
+          - nightly
+        target:
+          - { os: ubuntu-latest, triple: x86_64-unknown-linux-gnu }
+          - { os: macos-latest, triple: x86_64-apple-darwin }
+          - { os: windows-latest, triple: x86_64-pc-windows-msvc }
+
+    name: ${{ matrix.version }} - ${{ matrix.target.triple }}
+    runs-on: ${{ matrix.target.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install ${{ matrix.version }} on ${{ matrix.target.triple }}
+        run: |
+          rustup set profile minimal
+          rustup override set ${{ matrix.version }}
+
+      - name: Check with rustfmt and clippy
+        if: matrix.version == 'stable' && matrix.target.os == 'ubuntu-latest'
+        run: |
+          rustup component add clippy rustfmt
+          cargo fmt -- --check
+          cargo clippy
+
+      - name: Check build
+        run: cargo check
