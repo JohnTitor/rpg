@@ -10,8 +10,8 @@
 use clap::Clap;
 use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use serde::{Deserialize, Serialize};
-use std::fs::File;
 use std::ffi::OsString;
+use std::fs::File;
 use std::io::prelude::*;
 
 use crate::error::RpgError;
