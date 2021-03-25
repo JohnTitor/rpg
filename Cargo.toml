@@ -18,8 +18,8 @@ name = "rpg"
 path = "src/main.rs"
 
 [dependencies]
-clap = "=3.0.0-beta.2"
 percent-encoding = "2.1"
+pico-args = "0.4"
 reqwest = { version = "0.11.2", features = ["blocking", "json"] }
 serde = { version = "1", features = ["derive"] }
 thiserror = "1"

@@ -3,12 +3,12 @@
 //! ## Usage
 //!
 //! ```sh
-//! rpg share <file-name>
+//! rpg share <FILENAME> [OPTIONS]
 //! ```
 //! file-name: A file contains code to share.
 
-use clap::Clap;
 use serde::Deserialize;
+use std::ffi::OsString;
 use std::io::prelude::*;
 use std::{collections::HashMap, fs::File};
 
@@ -19,19 +19,15 @@ use crate::{validate_opts, Validator};
 const GIST_GEN_URL: &str = "https://play.rust-lang.org/meta/gist/";
 
 /// A subcommand for generating permanent playground URL.
-#[derive(Clap)]
 pub(crate) struct Share {
     /// File name contains code you want to share.
-    file_name: String,
-    #[clap(short, long, default_value = "stable")]
+    pub(crate) file_name: OsString,
     /// rustc version, panic if not `stable`, `beta`, or `nightly`.
-    version: String,
-    #[clap(short, long, default_value = "debug")]
+    pub(crate) version: String,
     /// Opt level, panic if not `debug` or `release`.
-    mode: String,
-    #[clap(short, long, default_value = "2018")]
+    pub(crate) mode: String,
     /// Edition, panic if not `2015` or `2018`.
-    edition: String,
+    pub(crate) edition: String,
 }
 
 impl Validator for Share {
